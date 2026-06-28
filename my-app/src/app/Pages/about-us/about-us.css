@@ -235,6 +235,11 @@ body {
   align-items: center;
   justify-content: center;
 }
+.support-icon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
 
 .support-card-title {
   font-size: 14px;
