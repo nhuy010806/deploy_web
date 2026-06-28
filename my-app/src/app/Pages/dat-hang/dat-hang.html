@@ -216,60 +216,72 @@
   <div class="modal-overlay" *ngIf="showTransferModal">
     <div class="transfer-modal">
       <div class="modal-header">
-        <h3>Thanh toán Chuyển khoản</h3>
+        <div>
+          <h3>Thanh toán Chuyển khoản</h3>
+          <p class="modal-header-sub">Vui lòng nhập đúng thông tin bên dưới</p>
+        </div>
         <button class="btn-close" (click)="closeTransferModal()">×</button>
       </div>
       <div class="modal-body">
         <!-- QR Code Column -->
         <div class="qr-section">
-          <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px; color: #888; letter-spacing: 1px;">QUÉT MÃ QR</div>
-          <div class="qr-image-wrapper">
-            <!-- Simulated premium QR code using SVG -->
-            <svg width="160" height="160" viewBox="0 0 29 29" style="background:#fff;">
-              <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm6-2h1v1H8zm1 1h1v2H9zm1-1h1v1h-1zm0 2h1v1h-1zm-2 1h1v1H8zm2 0h1v1h-1zm-9 4h7v7H0zm1 1v5h5V9zm1 1h3v3H2zm12-9h3v1h-3zm1 1h2v1h-2zm-1 2h1v2h-1zm2 1h1v1h-1zm-2 1h1v1h-1zm2 0h1v1h-1zm-9 5h1v1H5zm1 1h1v1H6zm-1 1h1v1H5zm1 1h1v1H6zm2-5h1v1H8zm1 1h1v1H9zm-1 1h1v1H8zm1 1h1v1H9zm12-12h7v7h-7zm1 1v5h5V17zm1 1h3v3H22zm-7 6h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm1 1h1v1h-1zm8-4h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm1 1h1v1h-1zm-6 2h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm1 1h1v1h-1zm-6-2h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm1 1h1v1h-1z" fill="#2d3a2e"/>
-            </svg>
+          <div style="font-size: 11px; font-weight: bold; margin-bottom: 12px; color: #888; letter-spacing: 1px;">QUÉT MÃ QR</div>
+          <div class="qr-image-wrapper" style="position: relative; padding: 0; overflow: hidden; border: none;">
+            <img [src]="'https://img.vietqr.io/image/VCB-102345678901-qr_only.png?amount=' + totalPrice + '&accountName=CONG%20TY%20LIGHTBOOKS&addInfo=Thanh%20toan%20don%20hang'" 
+                 alt="Mã QR Vietcombank" 
+                 style="width: 160px; height: 160px; object-fit: contain; background:#fff; border: 1px solid #ddd; border-radius: 12px; padding: 8px;" />
+            <!-- Small VCB bank logo overlay in the center -->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 26px; height: 26px; background: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid #eee;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2d3a2e" stroke-width="2.2">
+                <line x1="3" y1="22" x2="21" y2="22"/>
+                <rect x="6" y="11" width="3" height="11"/>
+                <rect x="10.5" y="7" width="3" height="15"/>
+                <rect x="15" y="14" width="3" height="8"/>
+                <polyline points="3 7 9 1 15 7 21 1"/>
+              </svg>
+            </div>
           </div>
-          <div class="qr-desc">
+          <div class="qr-desc" style="margin-top: 12px;">
             Sử dụng ứng dụng Ngân hàng<br/>hoặc Ví điện tử để quét mã.
           </div>
         </div>
 
         <!-- Bank Details Column -->
         <div class="info-section">
-          <div style="font-size: 11px; color: #888; margin-bottom: 4px;">Ngân hàng</div>
-          <div style="font-size: 15px; font-weight: bold; color: #1a1a1a; margin-bottom: 8px;">Vietcombank (VCB)</div>
+          <div class="bank-detail-group">
+            <span class="bank-detail-label">Ngân hàng</span>
+            <div class="bank-detail-text">Vietcombank (VCB)</div>
+          </div>
 
           <div class="bank-detail-group">
             <span class="bank-detail-label">Số tài khoản</span>
             <div class="bank-detail-val-wrap">
               <span class="bank-detail-value">1023 4567 8901</span>
-              <button class="btn-copy-text" (click)="copyToClipboard('102345678901', 'Số tài khoản')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                Sao chép
+              <button class="btn-copy-icon" (click)="copyToClipboard('102345678901', 'Số tài khoản')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
             </div>
           </div>
 
           <div class="bank-detail-group">
             <span class="bank-detail-label">Chủ tài khoản</span>
-            <div style="font-size: 14px; font-weight: bold; color: #1a1a1a; padding: 4px 0;">CONG TY LIGHTBOOKS</div>
+            <div class="bank-detail-text">CONG TY LIGHTBOOKS</div>
           </div>
 
           <div class="bank-detail-group">
             <span class="bank-detail-label">Số tiền</span>
-            <div class="bank-detail-val-wrap" style="background: #fdf2f2; border-color: #f5c2c2;">
-              <span class="bank-detail-value highlight">{{ totalPrice | number:'1.0-0' }} đ</span>
-              <button class="btn-copy-text" (click)="copyToClipboard(totalPrice.toString(), 'Số tiền')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                Sao chép
+            <div class="bank-detail-val-wrap highlight-bg">
+              <span class="bank-detail-value highlight-text">{{ totalPrice | number:'1.0-0' }} VND</span>
+              <button class="btn-copy-icon highlight-color" (click)="copyToClipboard(totalPrice.toString(), 'Số tiền')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
             </div>
           </div>
 
           <!-- Info message -->
           <div class="note-box">
-            <div style="display:flex; gap:6px; align-items:flex-start;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d3a2e" stroke-width="2" style="margin-top:1px; flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d3a2e" stroke-width="2" style="margin-top:2px; flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               <span>Hệ thống sẽ tự động xác nhận sau 1-3 phút. Quý khách vui lòng giữ lại biên lai chuyển tiền.</span>
             </div>
           </div>
@@ -305,9 +317,18 @@
       <div class="wallet-sub">Vui lòng quét mã QR để hoàn tất đơn hàng</div>
 
       <div class="wallet-qr-wrapper">
-        <svg width="165" height="165" viewBox="0 0 29 29" style="background:#fff; border: 4px solid #2d3a2e; border-radius: 4px; padding: 2px;">
-          <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm6-2h1v1H8zm1 1h1v2H9zm1-1h1v1h-1zm0 2h1v1h-1zm-2 1h1v1H8zm2 0h1v1h-1zm-9 4h7v7H0zm1 1v5h5V9zm1 1h3v3H2zm12-9h3v1h-3zm1 1h2v1h-2zm-1 2h1v2h-1zm2 1h1v1h-1zm-2 1h1v1h-1zm2 0h1v1h-1zm-9 5h1v1H5zm1 1h1v1H6zm-1 1h1v1H5zm1 1h1v1H6zm2-5h1v1H8zm1 1h1v1H9zm-1 1h1v1H8zm1 1h1v1H9zm12-12h7v7h-7zm1 1v5h5V17zm1 1h3v3H22zm-7 6h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm1 1h1v1h-1zm8-4h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm1 1h1v1h-1zm-6 2h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm1 1h1v1h-1zm-6-2h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm1 1h1v1h-1z" fill="#2d3a2e"/>
-        </svg>
+        <div style="position: relative; display: inline-block;">
+          <img [src]="'https://api.qrserver.com/v1/create-qr-code/?size=165x165&color=2d3a2e&data=MomoPayment_LIGHTBOOKS_' + totalPrice" 
+               alt="QR Ví điện tử" 
+               style="width: 165px; height: 165px; border: 4px solid #2d3a2e; border-radius: 12px; padding: 6px; background: #fff;" />
+          <!-- Small logo overlay in the center -->
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 26px; height: 26px; background: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid #eee;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2d3a2e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M16 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+            </svg>
+          </div>
+        </div>
       </div>
 
       <div class="wallet-amount-box">
@@ -319,14 +340,13 @@
         Mở ứng dụng Ví (MoMo, ZaloPay, ShopeePay) để quét mã
       </div>
 
-      <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-        <a style="font-size:12px; color:#888; text-decoration:underline; cursor:pointer;" (click)="closeWalletModal()">Hủy giao dịch</a>
-        <button class="btn-wallet-submit" (click)="navigateToSuccess()">
+      <div class="wallet-actions">
+        <a class="btn-wallet-cancel" (click)="closeWalletModal()">Hủy giao dịch</a>
+        <button class="btn-wallet-submit-right" (click)="navigateToSuccess()">
           Xác nhận đã thanh toán
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </button>
       </div>
     </div>
   </div>
-
 </div>

@@ -38,6 +38,11 @@ export class DatHang {
 
   selectPayment(method: string) {
     this.selectedPayment = method;
+    if (method === 'transfer') {
+      this.showTransferModal = true;
+    } else if (method === 'wallet') {
+      this.showWalletModal = true;
+    }
   }
 
   // Confirm Order Action

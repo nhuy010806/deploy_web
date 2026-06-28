@@ -14,8 +14,12 @@ import { LinkSocialComponent } from './Pages/PersonalAccount/link-social/link-so
 import { Cart } from './Pages/cart/cart';
 import { DatHang } from './Pages/dat-hang/dat-hang';
 import { DatHangThanhCong } from './Pages/dat-hang-thanh-cong/dat-hang-thanh-cong';
+import { AboutUs } from './Pages/about-us/about-us';
+import { Policy } from './Pages/policy/policy';
 
 export const routes: Routes = [
+  { path: 'about-us', component: AboutUs },
+  { path: 'policy', component: Policy },
   { path: 'login', component: LoginPage },
   { path: 'dashboard', component: DashboardPage },
   { path: 'thanh-li', component: ThanhLi },

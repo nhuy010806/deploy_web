@@ -426,6 +426,12 @@
   color: #1a1a1a;
 }
 
+.modal-header-sub {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+
 .btn-close {
   background: none;
   border: none;
@@ -473,18 +479,6 @@
   justify-content: center;
 }
 
-.qr-placeholder {
-  width: 160px;
-  height: 160px;
-  background: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: #888;
-  font-weight: 600;
-}
-
 .qr-desc {
   font-size: 11px;
   color: #666;
@@ -506,8 +500,14 @@
 .bank-detail-label {
   font-size: 11px;
   color: #888;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
+}
+
+.bank-detail-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
 }
 
 .bank-detail-val-wrap {
@@ -520,44 +520,51 @@
   padding: 10px 12px;
 }
 
+.bank-detail-val-wrap.highlight-bg {
+  background: #fce8e6;
+  border: 1px solid #f9c2c2;
+}
+
 .bank-detail-value {
   font-size: 14px;
   font-weight: 700;
   color: #1a1a1a;
 }
 
-.bank-detail-value.highlight {
-  color: #e53935;
-  font-size: 16px;
+.bank-detail-value.highlight-text {
+  color: #c0392b;
 }
 
-.btn-copy-text {
+.btn-copy-icon {
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #2d3a2e;
-  font-size: 11px;
-  font-weight: 600;
-  gap: 4px;
-  padding: 2px 6px;
+  padding: 4px;
   border-radius: 4px;
   transition: background 0.15s;
 }
-.btn-copy-text:hover {
-  background: #f0ece4;
+
+.btn-copy-icon:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.btn-copy-icon.highlight-color {
+  color: #c0392b;
 }
 
 .note-box {
   background: #f5f8f5;
-  border: 1px solid #dcd;
+  border: 1px solid #eef3ee;
   border-left: 3px solid #2d3a2e;
-  padding: 10px 12px;
-  border-radius: 0 6px 6px 0;
-  font-size: 11px;
+  padding: 12px 14px;
+  border-radius: 0 8px 8px 0;
+  font-size: 11.5px;
   color: #444;
-  line-height: 1.4;
+  line-height: 1.55;
 }
 
 .modal-actions {
@@ -617,7 +624,7 @@
 .wallet-logo-icon {
   width: 40px;
   height: 40px;
-  background: #f5f8f5;
+  background: #eef3ee;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -629,21 +636,19 @@
 .wallet-modal h3 {
   font-size: 16px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #2d3a2e;
   margin-bottom: 6px;
 }
 
 .wallet-sub {
   font-size: 12px;
-  color: #888;
+  color: #666;
   margin-bottom: 20px;
 }
 
 .wallet-qr-wrapper {
   background: #fff;
-  border: 1px solid #ddd;
   border-radius: 12px;
-  padding: 12px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -651,50 +656,70 @@
 }
 
 .wallet-amount-box {
-  background: #fafaf8;
-  border: 1px solid #e2ddd6;
+  background: #f4f4f4;
   border-radius: 8px;
   width: 100%;
-  padding: 10px;
-  margin-bottom: 16px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .wallet-amount-label {
-  font-size: 11px;
-  color: #888;
-  margin-bottom: 2px;
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
 }
 
 .wallet-amount-val {
-  font-size: 18px;
-  font-weight: 800;
-  color: #2d3a2e;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
 }
 
 .wallet-notice {
-  font-size: 11px;
+  font-size: 12px;
   color: #666;
   line-height: 1.4;
   margin-bottom: 24px;
 }
 
-.btn-wallet-submit {
+.wallet-actions {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.btn-wallet-cancel {
+  font-size: 13px;
+  color: #666;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn-wallet-cancel:hover {
+  color: #1a1a1a;
+}
+
+.btn-wallet-submit-right {
   background: #2d3a2e;
   color: #fff;
   border: none;
   border-radius: 20px;
-  padding: 12px;
-  font-size: 14px;
+  padding: 10px 18px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
-.btn-wallet-submit:hover {
+.btn-wallet-submit-right:hover {
   background: #1a241b;
 }
 
@@ -721,5 +746,6 @@
     border-bottom: 1px solid #f0ece4;
     padding-right: 0;
     padding-bottom: 20px;
+    margin-bottom: 12px;
   }
 }
