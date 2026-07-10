@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { BookService } from '../../Services/book.service';
 
 interface Book {
@@ -31,6 +31,7 @@ interface Book {
 })
 export class SachDienTu implements OnInit, OnDestroy {
   private bookService = inject(BookService);
+  private route = inject(ActivatedRoute);
 
   // Countdown Timer
   readonly dd = signal('00');
@@ -63,6 +64,18 @@ export class SachDienTu implements OnInit, OnDestroy {
   books: Book[] = [];
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const cat = params['category'];
+      if (cat && this.selectedCategories.hasOwnProperty(cat)) {
+        // Reset all categories first
+        Object.keys(this.selectedCategories).forEach(k => {
+          (this.selectedCategories as any)[k] = false;
+        });
+        // Select the one from query param
+        (this.selectedCategories as any)[cat] = true;
+      }
+    });
+
     this.startTimer();
     this.loadBooks();
   }
@@ -151,9 +164,9 @@ export class SachDienTu implements OnInit, OnDestroy {
     this.mm.set(String(m).padStart(2, '0'));
   }
 
-  // Flash Sale section (displays exactly 4 books in a single neat row)
+  // Flash Sale section (displays exactly 5 books in a single neat row)
   getFlashSaleBooks(): Book[] {
-    return this.books.filter(b => b.isFlashSale).slice(0, 4);
+    return this.books.filter(b => b.isFlashSale).slice(0, 5);
   }
 
   // Get filtered and sorted books for Suggestions section

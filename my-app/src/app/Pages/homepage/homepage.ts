@@ -38,7 +38,14 @@ export class Homepage implements OnInit, OnDestroy {
   }
 
   // ── Search category chips ──
-  readonly searchCats = ['Tiểu thuyết', 'Tâm lý', 'Kinh tế', 'Manga', 'Thiếu nhi', 'Lịch sử'];
+  readonly searchCats = [
+    { name: 'Tiểu thuyết', id: 'vanHoc' },
+    { name: 'Tâm lý', id: 'tamLyKyNang' },
+    { name: 'Kinh tế', id: 'kinhTe' },
+    { name: 'Manga', id: 'thieuNhi' },
+    { name: 'Thiếu nhi', id: 'thieuNhi' },
+    { name: 'Lịch sử', id: 'tieuSuHoiKy' }
+  ];
 
   // ── Flash sale products ──
   flashSale: Product[] = [];
@@ -47,18 +54,13 @@ export class Homepage implements OnInit, OnDestroy {
   newBooks: Product[] = [];
 
   // ── Best sellers this week ──
-  readonly bestSellers = [
-    { rank: '01', title: 'Con chim xanh biếc bay về', author: 'Nguyễn Nhật Ánh', price: '125.000đ', img: 'img/books/phantom.jpg' },
-    { rank: '02', title: 'Nhà giả kim', author: 'Paulo Coelho', price: '89.000đ', img: 'img/books/seagull.jpg' },
-    { rank: '03', title: 'Lược sử thời gian', author: 'Stephen Hawking', price: '60.000đ', img: 'img/books/dune.jpg' },
-  ];
+  bestSellers: (Product & { rank: string })[] = [];
 
   // ── Combos ──
-  readonly combos: Product[] = [
-    { title: 'Trọn bộ Murakami', author: '4 cuốn ấn bản đặc biệt', img: 'img/books/cooking.jpg', price: '450.000đ' },
-    { title: 'Trọn bộ Murakami', author: '4 cuốn ấn bản đặc biệt', img: 'img/books/seagull.jpg', price: '450.000đ' },
-    { title: 'Trọn bộ Murakami', author: '4 cuốn ấn bản đặc biệt', img: 'img/books/dune.jpg', price: '450.000đ' },
-  ];
+  combos: Product[] = [];
+
+  // ── Featured Book ──
+  featuredBook: Product | null = null;
 
   // ── Authors ──
   readonly authors = [
@@ -119,6 +121,18 @@ export class Homepage implements OnInit, OnDestroy {
             discount: `${book.discount_percent}%`
           }))
           .slice(0, 4);
+
+        // bestSellers lấy sách ngẫu nhiên hoặc top 3
+        this.bestSellers = mappedProducts.slice(4, 7).map((p, idx) => ({
+          ...p,
+          rank: `0${idx + 1}`
+        }));
+
+        // featuredBook lấy 1 sách đặc biệt
+        this.featuredBook = mappedProducts[8] || null;
+
+        // combos lấy 3 sách
+        this.combos = mappedProducts.slice(10, 13);
       },
       error: (err) => {
         console.error('Không thể lấy danh sách sách từ backend:', err);

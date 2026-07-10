@@ -9,13 +9,13 @@
   <section class="section">
     <h2 class="block-title">Có thể bạn đang tìm kiếm...</h2>
     <div class="cat-row">
-      @for (c of searchCats; track c) {
-        <div class="cat-item">
+      @for (c of searchCats; track c.name) {
+        <a [routerLink]="['/sach-dien-tu']" [queryParams]="{ category: c.id }" class="cat-item" style="text-decoration: none; color: inherit;">
           <div class="cat-circle">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a3a1e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           </div>
-          <span>{{ c }}</span>
-        </div>
+          <span>{{ c.name }}</span>
+        </a>
       }
     </div>
   </section>
@@ -81,7 +81,7 @@
       <h2 class="block-title"><span class="leaf">🌱</span> Bán chạy tuần này</h2>
       <div class="bs-list">
         @for (b of bestSellers; track $index) {
-          <div class="bs-item">
+          <a [routerLink]="['/book-detail', b._id]" class="bs-item" style="text-decoration: none; color: inherit;">
             <span class="bs-rank">{{ b.rank }}</span>
             <img class="bs-thumb" [src]="b.img" [alt]="b.title" />
             <div class="bs-info">
@@ -89,21 +89,23 @@
               <div class="bs-author">{{ b.author }}</div>
             </div>
             <span class="bs-price">{{ b.price }}</span>
-          </div>
+          </a>
         }
       </div>
     </div>
 
-    <div class="featured-card">
-      <span class="featured-tag">LƯU CHỌN MỖI NGÀY</span>
-      <h3 class="featured-title">Dành riêng<br/>cho bạn ngày<br/>hôm nay</h3>
-      <div class="featured-actions">
-        <button class="btn-light">Thêm vào giỏ hàng</button>
-        <span class="featured-price">195.000đ</span>
-      </div>
-      <button class="btn-best">Bán chạy nhất</button>
-      <img class="featured-img" src="img/books/money.jpg" alt="Sách nổi bật" />
-    </div>
+    @if (featuredBook) {
+      <a [routerLink]="['/book-detail', featuredBook._id]" class="featured-card">
+        <span class="featured-tag">LƯU CHỌN MỖI NGÀY</span>
+        <h3 class="featured-title">Dành riêng<br/>cho bạn ngày<br/>hôm nay</h3>
+        <div class="featured-actions">
+          <button class="btn-light">Thêm vào giỏ hàng</button>
+          <span class="featured-price">{{ featuredBook.price }}</span>
+        </div>
+        <button class="btn-best">Bán chạy nhất</button>
+        <img [src]="featuredBook.img" [alt]="featuredBook.title" class="featured-img" />
+      </a>
+    }
   </section>
 
   <!-- ══ COMBO ══ -->
@@ -111,11 +113,11 @@
     <h2 class="block-title">Combo ưu đãi <span class="hot-tag">TIẾT KIỆM HƠN 30%</span></h2>
     <div class="grid-3">
       @for (c of combos; track $index) {
-        <article class="combo-card">
+        <a [routerLink]="['/book-detail', c._id]" class="combo-card" style="text-decoration: none; color: inherit;">
           <img class="combo-img" [src]="c.img" [alt]="c.title" />
           <div class="combo-info">
-            <div class="card-title">{{ c.title }}</div>
-            <div class="card-author">{{ c.author }}</div>
+            <div class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">{{ c.title }}</div>
+            <div class="card-author" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">{{ c.author }}</div>
             <div class="combo-bottom">
               <span class="price-now">{{ c.price }}</span>
               <button class="combo-cart" aria-label="Thêm vào giỏ">
@@ -123,7 +125,7 @@
               </button>
             </div>
           </div>
-        </article>
+        </a>
       }
     </div>
   </section>
