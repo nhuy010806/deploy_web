@@ -5,6 +5,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 
 const app = express();
 const port = 3002;
@@ -202,6 +203,21 @@ async function startServer() {
             } catch (err) {
                 console.error('Lỗi khi lấy danh sách sách:', err);
                 res.status(500).json({ error: 'Lỗi server' });
+            }
+        });
+
+        // API lấy chi tiết 1 sách theo ID
+        app.get('/api/books/:id', async (req, res) => {
+            try {
+                const bookId = req.params.id;
+                const book = await db.collection('books').findOne({ _id: new ObjectId(bookId) });
+                if (!book) {
+                    return res.status(404).json({ error: 'Không tìm thấy sách' });
+                }
+                res.json(book);
+            } catch (err) {
+                console.error('Lỗi khi lấy chi tiết sách:', err);
+                res.status(500).json({ error: 'Lỗi server hoặc ID không hợp lệ' });
             }
         });
 

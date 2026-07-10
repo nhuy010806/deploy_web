@@ -4,6 +4,7 @@ import { BookService } from '../../Services/book.service';
 
 
 interface Product {
+  _id?: string;
   title: string;
   author: string;
   img: string;
@@ -81,6 +82,7 @@ export class Homepage implements OnInit, OnDestroy {
     this.bookService.getBooks().subscribe({
       next: (books) => {
         const mappedProducts: Product[] = books.map(book => ({
+          _id: book._id,
           title: book.title,
           author: book.author,
           img: book.image,
@@ -99,6 +101,7 @@ export class Homepage implements OnInit, OnDestroy {
         this.flashSale = books
           .filter(book => book.discount_percent && book.discount_percent < 0)
           .map(book => ({
+            _id: book._id,
             title: book.title,
             author: book.author,
             img: book.image,
