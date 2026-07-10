@@ -1,7 +1,8 @@
 /* header.component.css */
 
-/* ========== GOOGLE FONTS (RALEWAY) ========== */
+/* ========== GOOGLE FONTS (RALEWAY) & BOOTSTRAP ICONS ========== */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
 
 /* ========== RESET & BASE ========== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,6 +36,7 @@
 .lb-header__main {
   background-color: #084d3d; /* Nền xanh lá đậm (dark green) */
   padding: 0 48px;
+  position: relative; /* Thêm để định vị tuyệt đối phần danh mục dropdown */
 }
 
 .lb-header__main-inner {
@@ -516,5 +518,282 @@
   .lb-header__nav-item::after {
     left: 8px;
     right: 8px;
+  }
+}
+
+/* ========== CATEGORIES BACKDROP & DROPDOWN MENU ========== */
+.lb-categories-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  z-index: 990; /* Nằm dưới header nhưng trên nội dung trang */
+}
+
+.lb-categories-dropdown {
+  position: absolute;
+  top: calc(100% + 4px); /* gap nhỏ dưới header */
+  left: 48px;
+  width: 860px; /* Chiều rộng nhỏ hơn để không chiếm toàn màn hình */
+  background-color: #ffffff;
+  border-radius: 12px; /* Bo tròn đều tất cả các góc */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  display: flex;
+  min-height: auto;
+  max-height: 460px; /* Thu nhỏ chiều cao */
+  overflow: hidden;
+  z-index: 1001; /* Đè lên backdrop */
+  border: 1px solid #e2e8f0;
+  animation: dropdownSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top center;
+}
+
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* Left Sidebar */
+.lb-categories-sidebar {
+  width: 240px; /* Nhỏ hơn */
+  background-color: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  padding: 16px 12px; /* Khoảng cách ít hơn */
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lb-categories-sidebar__title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-left: 10px;
+  margin-bottom: 2px;
+}
+
+.lb-categories-sidebar__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.lb-categories-sidebar__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px; /* Thu nhỏ padding */
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.lb-categories-sidebar__item:hover {
+  background-color: #e2e8f0;
+  color: #084d3d;
+}
+
+.lb-categories-sidebar__item.active {
+  background-color: #ffffff;
+  color: #084d3d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #ff4d6d;
+  padding-left: 10px;
+}
+
+.lb-categories-sidebar__arrow {
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.5;
+  transition: transform 0.2s ease;
+}
+
+.lb-categories-sidebar__item.active .lb-categories-sidebar__arrow {
+  transform: translateX(4px);
+  opacity: 1;
+  color: #ff4d6d;
+}
+
+/* Right Content Area */
+.lb-categories-content {
+  flex: 1;
+  padding: 20px 24px; /* Khoảng cách ít hơn */
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.lb-categories-content__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 8px;
+}
+
+.lb-categories-content__title-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(21%) sepia(35%) saturate(1478%) hue-rotate(125deg) brightness(92%) contrast(97%);
+}
+
+.lb-categories-content__title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #084d3d;
+}
+
+.lb-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px 20px; /* Thu nhỏ khoảng cách */
+  padding-bottom: 8px;
+}
+
+.lb-categories-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lb-categories-column__title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 4px;
+  letter-spacing: 0.03em;
+}
+
+.lb-categories-column__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.lb-categories-column__item {
+  line-height: 1.3;
+}
+
+.lb-categories-column__link {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #64748b;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* khoảng cách giữa icon và chữ */
+  transition: all 0.15s ease;
+}
+
+.lb-categories-column__link:hover {
+  color: #ff4d6d;
+}
+
+.lb-categories-item-icon {
+  font-size: 12px;
+  color: #ff4d6d; /* màu hồng xinh xắn cho các icon của mục con */
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.lb-categories-column__link:hover .lb-categories-item-icon {
+  transform: scale(1.15);
+  color: #084d3d;
+}
+
+.lb-categories-column__link--all {
+  color: #0284c7;
+  font-weight: 600;
+}
+
+.lb-categories-column__link--all:hover {
+  color: #0284c7;
+  text-decoration: underline;
+}
+
+/* RESPONSIVE CATEGORIES */
+@media (max-width: 992px) {
+  .lb-categories-dropdown {
+    left: 20px;
+    right: 20px;
+    width: auto;
+    min-height: auto;
+  }
+  .lb-categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lb-categories-dropdown {
+    flex-direction: column;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .lb-categories-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 10px 14px;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 10px;
+  }
+  .lb-categories-sidebar__title {
+    display: none;
+  }
+  .lb-categories-sidebar__list {
+    flex-direction: row;
+    gap: 8px;
+  }
+  .lb-categories-sidebar__item {
+    padding: 6px 12px;
+  }
+  .lb-categories-sidebar__item.active {
+    border-left: none;
+    border-bottom: 3px solid #ff4d6d;
+    border-radius: 8px 8px 0 0;
+    padding-left: 12px;
+  }
+  .lb-categories-sidebar__arrow {
+    display: none;
+  }
+  .lb-categories-content {
+    padding: 14px 18px;
+  }
+  .lb-categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .lb-categories-grid {
+    grid-template-columns: 1fr;
   }
 }

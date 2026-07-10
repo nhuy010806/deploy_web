@@ -13,11 +13,184 @@ const USER_KEY = 'lightbooks_user';
   styleUrl: './page-header.css',
 })
 export class HeaderComponent implements AfterViewInit, OnDestroy {
+  isCategoriesMenuOpen = false;
+  activeCategoryIndex = 0;
   cartCount = 0;
   currentUser: any = null;
   isUserDropdownOpen = false;
   showLogoutModal = false;
   showLoginRequiredModal = false;
+
+  readonly categories = [
+    {
+      name: 'Sách Mới',
+      subcategories: [
+        {
+          name: 'VĂN HỌC',
+          items: [
+            { name: 'Tiểu Thuyết', icon: 'bi-heart-fill' },
+            { name: 'Truyện Ngắn - Tản Văn', icon: 'bi-chat-quote-fill' },
+            { name: 'Light Novel', icon: 'bi-star-fill' },
+            { name: 'Ngôn Tình', icon: 'bi-balloon-heart-fill' },
+            { name: 'Trinh Thám', icon: 'bi-eye-slash-fill' }
+          ]
+        },
+        {
+          name: 'KINH TẾ',
+          items: [
+            { name: 'Nhân Vật - Bài Học Kinh Doanh', icon: 'bi-person-badge-fill' },
+            { name: 'Quản Trị - Lãnh Đạo', icon: 'bi-people-fill' },
+            { name: 'Marketing - Bán Hàng', icon: 'bi-cart-check-fill' },
+            { name: 'Phân Tích Kinh Tế', icon: 'bi-graph-up-arrow' }
+          ]
+        },
+        {
+          name: 'TÂM LÝ - KĨ NĂNG SỐNG',
+          items: [
+            { name: 'Kỹ Năng Sống', icon: 'bi-activity' },
+            { name: 'Rèn Luyện Nhân Cách', icon: 'bi-gem' },
+            { name: 'Tâm Lý', icon: 'bi-brain-fill' },
+            { name: 'Sách Cho Tuổi Mới Lớn', icon: 'bi-brightness-high-fill' }
+          ]
+        },
+        {
+          name: 'SÁCH THIẾU NHI',
+          items: [
+            { name: 'Manga - Comic', icon: 'bi-images' },
+            { name: 'Kiến Thức Bách Khoa', icon: 'bi-globe2' },
+            { name: 'Sách Tranh Kỹ Năng Sống', icon: 'bi-brush-fill' },
+            { name: 'Vừa Học - Vừa Chơi', icon: 'bi-puzzle-fill' }
+          ]
+        },
+        {
+          name: 'TIỂU SỬ - HỒI KÝ',
+          items: [
+            { name: 'Câu Chuyện Cuộc Đời', icon: 'bi-book-half' },
+            { name: 'Chính Trị', icon: 'bi-bank2' },
+            { name: 'Kinh Tế', icon: 'bi-cash-coin' },
+            { name: 'Nghệ Thuật - Giải Trí', icon: 'bi-controller' }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Sách Cũ',
+      subcategories: [
+        {
+          name: 'VĂN HỌC KINH ĐIỂN',
+          items: [
+            { name: 'Văn Học Việt Nam', icon: 'bi-mortarboard-fill' },
+            { name: 'Văn Học Nước Ngoài', icon: 'bi-translate' },
+            { name: 'Thơ - Kịch Cổ Điển', icon: 'bi-flower1' },
+            { name: 'Tác Phẩm Đoạt Giải', icon: 'bi-trophy-fill' }
+          ]
+        },
+        {
+          name: 'LỊCH SỬ - ĐỊA LÝ',
+          items: [
+            { name: 'Lịch Sử Việt Nam', icon: 'bi-flag-fill' },
+            { name: 'Lịch Sử Thế Giới', icon: 'bi-compass-fill' },
+            { name: 'Địa Lý & Du Khảo', icon: 'bi-map-fill' },
+            { name: 'Tư Liệu Cổ - Hiếm', icon: 'bi-journal-medical' }
+          ]
+        },
+        {
+          name: 'KHOA HỌC - KỸ THUẬT',
+          items: [
+            { name: 'Toán Học - Vật Lý', icon: 'bi-calculator-fill' },
+            { name: 'Y Học Cổ Truyền', icon: 'bi-droplet-fill' },
+            { name: 'Cơ Khí - Bách Khoa', icon: 'bi-nut-fill' },
+            { name: 'Nông - Lâm - Ngư Nghiệp', icon: 'bi-tree-fill' }
+          ]
+        },
+        {
+          name: 'GIÁO TRÌNH - TÀI LIỆU',
+          items: [
+            { name: 'Sách Giáo Khoa Cũ', icon: 'bi-journal-bookmark-fill' },
+            { name: 'Giáo Trình Đại Học', icon: 'bi-journal-text' },
+            { name: 'Tài Liệu Nghiên Cứu', icon: 'bi-search' },
+            { name: 'Từ Điển - Sách Tra Cứu', icon: 'bi-spellcheck' }
+          ]
+        },
+        {
+          name: 'SƯU TẦM & ĐẶC BIỆT',
+          items: [
+            { name: 'Ấn Bản Giới Hạn', icon: 'bi-patch-check-fill' },
+            { name: 'Sách Ký Tặng', icon: 'bi-pen-fill' },
+            { name: 'Tạp Chí Xưa', icon: 'bi-newspaper' },
+            { name: 'Sách Hán Nôm', icon: 'bi-feather' }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Ebook',
+      subcategories: [
+        {
+          name: 'VĂN HỌC & TIỂU THUYẾT',
+          items: [
+            { name: 'E-Novel', icon: 'bi-tablet-fill' },
+            { name: 'Trinh Thám - Kinh Dị', icon: 'bi-ghost' },
+            { name: 'Khoa Học Viễn Tưởng', icon: 'bi-rocket-takeoff-fill' },
+            { name: 'Ngôn Tình & Lãng Mạn', icon: 'bi-suit-heart-fill' }
+          ]
+        },
+        {
+          name: 'PHÁT TRIỂN BẢN THÂN',
+          items: [
+            { name: 'Sách Nói (Audiobook)', icon: 'bi-headphones' },
+            { name: 'Kỹ Năng Làm Việc', icon: 'bi-briefcase-fill' },
+            { name: 'Nghệ Thuật Sống Đẹp', icon: 'bi-sun-fill' },
+            { name: 'Tư Duy Sáng Tạo', icon: 'bi-lightbulb-fill' }
+          ]
+        },
+        {
+          name: 'HỌC NGOẠI NGỮ',
+          items: [
+            { name: 'Giáo Trình Tiếng Anh', icon: 'bi-alphabet-uppercase' },
+            { name: 'Tài Liệu IELTS/TOEFL', icon: 'bi-file-earmark-pdf-fill' },
+            { name: 'Tiếng Nhật - JLPT', icon: 'bi-translate' },
+            { name: 'Tiếng Trung - HSK', icon: 'bi-chat-dots-fill' }
+          ]
+        },
+        {
+          name: 'CÔNG NGHỆ - TIN HỌC',
+          items: [
+            { name: 'Lập Trình Web/App', icon: 'bi-code-slash' },
+            { name: 'Trí Tuệ Nhân Tạo (AI)', icon: 'bi-cpu-fill' },
+            { name: 'Thiết Kế Đồ Họa', icon: 'bi-palette-fill' },
+            { name: 'An Toàn Thông Tin', icon: 'bi-shield-lock-fill' }
+          ]
+        },
+        {
+          name: 'KHOA HỌC & CUỘC SỐNG',
+          items: [
+            { name: 'Vũ Trụ - Thiên Văn', icon: 'bi-stars' },
+            { name: 'Sức Khỏe - Dinh Dưỡng', icon: 'bi-heart-pulse-fill' },
+            { name: 'Tâm Lý Học Ứng Dụng', icon: 'bi-hash' },
+            { name: 'Bản Tin Công Nghệ', icon: 'bi-rss-fill' }
+          ]
+        }
+      ]
+    }
+  ];
+
+  toggleCategoriesMenu(event: Event): void {
+    event.stopPropagation();
+    this.isCategoriesMenuOpen = !this.isCategoriesMenuOpen;
+    if (this.isCategoriesMenuOpen) {
+      this.isUserDropdownOpen = false;
+    }
+  }
+
+  selectCategory(index: number, event: Event): void {
+    event.stopPropagation();
+    this.activeCategoryIndex = index;
+  }
+
+  closeCategoriesMenu(): void {
+    this.isCategoriesMenuOpen = false;
+  }
 
   private cartUpdatedHandler = () => this.updateCartBadge();
   private userUpdatedHandler = () => this.updateUser();

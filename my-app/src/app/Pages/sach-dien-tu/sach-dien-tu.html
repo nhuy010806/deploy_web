@@ -1,0 +1,175 @@
+<main class="page">
+  <div class="two-col-layout">
+    <!-- Cột bên trái: Bộ lọc tìm kiếm -->
+    <aside class="filter-sidebar">
+      <div class="filter-header-wrap">
+        <h3 class="filter-sidebar-title"><i class="bi bi-funnel-fill"></i> Bộ lọc tìm kiếm</h3>
+      </div>
+      
+      <!-- Lọc theo Giá (Checkbox) -->
+      <div class="filter-group">
+        <h4 class="filter-group-title">Khoảng Giá</h4>
+        <div class="filter-options">
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedPriceRanges.under50" />
+            <span>Dưới 50.000đ</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedPriceRanges.from50to100" />
+            <span>50.000đ - 100.000đ</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedPriceRanges.above100" />
+            <span>Trên 100.000đ</span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- Lọc theo Thể loại (Checkbox) -->
+      <div class="filter-group">
+        <h4 class="filter-group-title">Thể Loại</h4>
+        <div class="filter-options">
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedCategories.vanHoc" />
+            <span>Văn học</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedCategories.kinhTe" />
+            <span>Kinh tế</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedCategories.tamLyKyNang" />
+            <span>Tâm lý - Kỹ năng sống</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedCategories.thieuNhi" />
+            <span>Sách thiếu nhi</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedCategories.tieuSuHoiKy" />
+            <span>Tiểu sử - Hồi ký</span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- Lọc theo Độ tuổi (Checkbox) -->
+      <div class="filter-group">
+        <h4 class="filter-group-title">Độ Tuổi</h4>
+        <div class="filter-options">
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedAgeRanges.thieuNhi" />
+            <span>Thiếu nhi</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedAgeRanges.tuoiTeen" />
+            <span>Tuổi teen</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [(ngModel)]="selectedAgeRanges.nguoiLon" />
+            <span>Người lớn</span>
+          </label>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Cột bên phải: Toàn bộ nội dung sách (Flash Sale + Tuyển tập gợi ý) -->
+    <div class="catalog-content">
+      
+      <!-- ══ PHẦN 1: FLASH SALE SÁCH ĐIỆN TỬ ══ -->
+      <section class="section-flash">
+        <div class="row-head">
+          <div class="flash-head">
+            <span class="flash-title">⚡ Flash Sale Sách Điện Tử</span>
+            <div class="countdown">
+              <span class="cd-box">{{ dd() }}</span><span class="cd-label">ngày</span>
+              <span class="cd-box">{{ hh() }}</span><span class="cd-label">giờ</span>
+              <span class="cd-box">{{ mm() }}</span><span class="cd-label">phút</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flash-wrap">
+          <div class="grid-4">
+            <article class="card flash-card" *ngFor="let p of getFlashSaleBooks(); let idx = index" [class.popover-left]="idx % 4 >= 2">
+              <div class="card-thumb">
+                <span class="flash-badge">{{ p.priceStr }} <i class="bi bi-lightning-fill"></i></span>
+                <img [src]="p.img" [alt]="p.title" />
+              </div>
+              <div class="card-body">
+                <div class="card-title">{{ p.title }}</div>
+                <div class="card-author">{{ p.author }}</div>
+              </div>
+              
+              <!-- Hover Popover (Chỉ kích hoạt đối với mục Flash Sale, nền hồng nhạt, bóng nhẹ) -->
+              <div class="card-hover-popover">
+                <div class="popover-cover">
+                  <img [src]="p.img" [alt]="p.title" />
+                </div>
+                <div class="popover-info">
+                  <h4 class="popover-title">{{ p.title }}</h4>
+                  <div class="popover-author">{{ p.author }}</div>
+                  <div class="popover-price">
+                    <span class="price-now">{{ p.priceStr }}</span>
+                    <span class="price-old" *ngIf="p.oldPrice">{{ p.oldPrice }}</span>
+                  </div>
+                  <p class="popover-desc">{{ p.description }}</p>
+                  <a href="#" class="popover-detail-link">Chi tiết</a>
+                  <div class="popover-actions">
+                    <button class="btn-read"><i class="bi bi-book-fill"></i> Đọc sách</button>
+                    <button class="btn-like"><i class="bi bi-heart-fill"></i></button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ PHẦN 2: TUYỂN TẬP GỢI Ý ══ -->
+      <section class="section-catalog">
+        <div class="catalog-header">
+          <h2 class="block-title"><span class="leaf">🌱</span> Tuyển tập gợi ý</h2>
+          
+          <div class="catalog-sort">
+            <span class="sort-label">Sắp xếp theo :</span>
+            <div class="sort-select-wrapper">
+              <select class="sort-select" [(ngModel)]="selectedSort">
+                <option value="salesWeekly">Bán Chạy Tuần</option>
+                <option value="salesMonthly">Bán Chạy Tháng</option>
+                <option value="discount">Giảm giá nhiều nhất</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Grid sách tuyển tập gợi ý: 4 cuốn trên 1 hàng (Không còn hiệu ứng hover popover) -->
+        <div class="grid-4" *ngIf="getFilteredBooks().length > 0; else noBooks">
+          <article class="card catalog-card" *ngFor="let p of getFilteredBooks()">
+            <div class="card-thumb">
+              <span class="badge" *ngIf="p.discount">{{ p.discount }}</span>
+              <img [src]="p.img" [alt]="p.title" />
+            </div>
+            <div class="card-body">
+              <div class="card-title">{{ p.title }}</div>
+              <div class="card-author">{{ p.author }}</div>
+              <div class="card-price">
+                <span class="price-now">{{ p.priceStr }}</span>
+                <span class="price-old" *ngIf="p.oldPrice">{{ p.oldPrice }}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        
+        <!-- Template hiển thị khi không có kết quả phù hợp -->
+        <ng-template #noBooks>
+          <div class="no-books-container">
+            <i class="bi bi-journal-x no-books-icon"></i>
+            <p class="no-books-text">Không tìm thấy sách điện tử phù hợp với bộ lọc của bạn.</p>
+            <button class="btn-reset" (click)="resetFilters()">Đặt lại bộ lọc</button>
+          </div>
+        </ng-template>
+      </section>
+
+    </div>
+  </div>
+</main>

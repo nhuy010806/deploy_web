@@ -1,4 +1,6 @@
 <header class="lb-header">
+  <!-- Backdrop -->
+  <div class="lb-categories-backdrop" *ngIf="isCategoriesMenuOpen" (click)="closeCategoriesMenu()"></div>
 
   <!-- Phần 1: Top Promo Banner -->
   <div class="lb-header__promo">
@@ -18,7 +20,7 @@
         </a>
 
         <!-- Nút Danh mục -->
-        <button class="lb-header__categories-btn" aria-label="Danh mục">
+        <button class="lb-header__categories-btn" (click)="toggleCategoriesMenu($event)" aria-label="Danh mục">
           <img src="assets/icon/Icon_Danhmuc.png" alt="Danh mục" />
         </button>
       </div>
@@ -40,7 +42,7 @@
       <div class="lb-header__actions">
 
         <!-- Giỏ hàng -->
-        <a class="lb-header__action-btn" routerLink="/cart" (click)="onCartClick($event)" aria-label="Giỏ hàng">
+        <a class="lb-header__action-btn" routerLink="cart" (click)="onCartClick($event)" aria-label="Giỏ hàng">
           <span class="lb-header__icon-wrap">
             <img src="assets/icon/ic_cart.png" alt="Giỏ hàng" />
             <span class="lb-header__badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
@@ -57,8 +59,8 @@
             <div class="lb-header__dropdown-info">
               <span class="lb-header__dropdown-name">{{ currentUser?.name || currentUser?.email }}</span>
             </div>
-            <a routerLink="/profile" class="lb-header__dropdown-item">Tài khoản của tôi</a>
-            <a routerLink="/orders" class="lb-header__dropdown-item">Đơn hàng</a>
+            <a routerLink="/PersonalAccount" class="lb-header__dropdown-item">Tài khoản của tôi</a>
+            <a routerLink="/cart" class="lb-header__dropdown-item">Đơn hàng</a>
             <button class="lb-header__dropdown-item lb-header__dropdown-logout" (click)="confirmLogout()">Đăng xuất</button>
           </div>
         </div>
@@ -72,19 +74,63 @@
 
       </div>
     </div>
+
+    <!-- Categories Dropdown Panel -->
+    <div class="lb-categories-dropdown" *ngIf="isCategoriesMenuOpen" (click)="$event.stopPropagation()">
+      <!-- Left Sidebar -->
+      <div class="lb-categories-sidebar">
+        <h3 class="lb-categories-sidebar__title">Danh mục sản phẩm</h3>
+        <ul class="lb-categories-sidebar__list">
+          <li 
+            *ngFor="let cat of categories; let i = index" 
+            [class.active]="i === activeCategoryIndex"
+            (mouseenter)="selectCategory(i, $event)"
+            (click)="selectCategory(i, $event)"
+            class="lb-categories-sidebar__item"
+          >
+            <span class="lb-categories-sidebar__name">{{ cat.name }}</span>
+            <span class="lb-categories-sidebar__arrow">›</span>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Right Content Grid -->
+      <div class="lb-categories-content">
+        <div class="lb-categories-content__header">
+          <img src="assets/icon/Icon_Danhmuc.png" alt="Icon" class="lb-categories-content__title-icon" />
+          <h4 class="lb-categories-content__title">{{ categories[activeCategoryIndex].name }}</h4>
+        </div>
+        <div class="lb-categories-grid">
+          <div class="lb-categories-column" *ngFor="let sub of categories[activeCategoryIndex].subcategories">
+            <h5 class="lb-categories-column__title">{{ sub.name }}</h5>
+            <ul class="lb-categories-column__list">
+              <li class="lb-categories-column__item" *ngFor="let item of sub.items">
+                <a href="#" class="lb-categories-column__link" (click)="closeCategoriesMenu()">
+                  <i class="lb-categories-item-icon bi" [ngClass]="item.icon"></i>
+                  <span class="lb-categories-item-text">{{ item.name }}</span>
+                </a>
+              </li>
+              <li class="lb-categories-column__item">
+                <a href="#" class="lb-categories-column__link lb-categories-column__link--all" (click)="closeCategoriesMenu()">Xem tất cả</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Phần 3: Navigation Bar -->
   <nav class="lb-header__nav">
     <div class="lb-header__nav-inner">
-      <a routerLink="/new-books" routerLinkActive="active" class="lb-header__nav-item">SÁCH MỚI</a>
-      <a routerLink="/ebooks" routerLinkActive="active" class="lb-header__nav-item">SÁCH ĐIỆN TỬ</a>
-      <a routerLink="/used-books" routerLinkActive="active" class="lb-header__nav-item">SÁCH CŨ</a>
+      <a routerLink="homepage" routerLinkActive="active" class="lb-header__nav-item">SÁCH MỚI</a>
+      <a routerLink="/sach-dien-tu" routerLinkActive="active" class="lb-header__nav-item">SÁCH ĐIỆN TỬ</a>
+      <a routerLink="/sach-cu" routerLinkActive="active" class="lb-header__nav-item">SÁCH CŨ</a>
       <a routerLink="/flash-sales" routerLinkActive="active" class="lb-header__nav-item">FLASH SALES</a>
       <a routerLink="/authors" routerLinkActive="active" class="lb-header__nav-item">GÓC TÁC GIẢ</a>
-      <a routerLink="/about" routerLinkActive="active" class="lb-header__nav-item">VỀ CHÚNG TÔI</a>
+      <a routerLink="/about-us" routerLinkActive="active" class="lb-header__nav-item">VỀ CHÚNG TÔI</a>
       <a routerLink="/news" routerLinkActive="active" class="lb-header__nav-item">LIGHTBOOK NEWS</a>
-      <a routerLink="/clearance" routerLinkActive="active" class="lb-header__nav-item">THANH LÝ SÁCH</a>
+      <a routerLink="thanh-li" routerLinkActive="active" class="lb-header__nav-item">THANH LÝ SÁCH</a>
     </div>
   </nav>
 

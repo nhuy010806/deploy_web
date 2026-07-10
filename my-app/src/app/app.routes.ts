@@ -17,9 +17,11 @@ import { DatHangThanhCong } from './Pages/dat-hang-thanh-cong/dat-hang-thanh-con
 import { AboutUs } from './Pages/about-us/about-us';
 import { Policy } from './Pages/policy/policy';
 import { Homepage } from './Pages/homepage/homepage';
+import { SachDienTu } from './Pages/sach-dien-tu/sach-dien-tu';
 
 export const routes: Routes = [
   { path: 'homepage', component: Homepage },
+  { path: 'sach-dien-tu', component: SachDienTu },
   { path: 'about-us', component: AboutUs },
   { path: 'policy', component: Policy },
   { path: 'login', component: LoginPage },
