@@ -53,5 +53,5 @@ export const routes: Routes = [
   { path: 'address', redirectTo: 'PersonalAccount/address', pathMatch: 'full' },
   { path: 'security', redirectTo: 'PersonalAccount/account-security', pathMatch: 'full' },
   { path: 'social', redirectTo: 'PersonalAccount/link-social', pathMatch: 'full' },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: '', redirectTo: 'homepage', pathMatch: 'full' }
 ];
