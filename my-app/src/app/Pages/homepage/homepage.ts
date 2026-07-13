@@ -62,22 +62,18 @@ export class Homepage implements OnInit, OnDestroy {
   // ── Featured Book ──
   featuredBook: Product | null = null;
 
-  // ── Authors ──
-  readonly authors = [
-    { name: 'Nguyễn Nhật Ánh', desc: 'Vừa ra mắt ấn bản mới – Nặng nào có một chương hồn bồn lặng lười', img: 'img/books/office_preview.jpg' },
-    { name: 'Phan Ý Yên', desc: 'Buổi ký tặng sách sắp về tại Phố Sách Hà Nội vào chủ nhật này', img: 'img/books/office_preview.jpg' },
-    { name: 'Rosie Nguyễn', desc: 'Tặng bạn gói sự thật và cuộc đời không bạn gói ngừng dạy bàn chung tự', img: 'img/books/office_preview.jpg' },
-    { name: 'Hamlet Trương', desc: 'Chuẩn bị cho dự án sách mới kết hợp cùng nhau phim nắp cộng sẽ', img: 'img/books/office_preview.jpg' },
-  ];
+
 
   // ── Suggestions grid ──
   suggestions: Product[] = [];
 
   // ── News ──
-  readonly news = [
-    { tag: 'SỰ KIỆN', title: 'Ngày hội đọc sách LightBook 2026', desc: 'Khám phá hương thềm trị mở trong ngày đọc sách năm.', img: 'img/books/shelf_banner.jpg' },
-    { tag: 'CẢM HỨNG', title: 'Lợi ích của việc đọc sách buổi sáng', desc: 'Vì sao đọc sách buổi sáng giúp bạn cả ngày tỉnh táo và tốt cho não bộ.', img: 'img/books/office_preview.jpg' },
-    { tag: 'XU HƯỚNG', title: 'Sự trỗi dậy của thiết kế bìa sách tối giản', desc: 'Khám phá xu hướng thềm trị mở trong xuất bản hiện nay.', img: 'img/books/phantom.jpg' },
+  news: any[] = [];
+  
+  private readonly fallbackNews = [
+    { id: 'n1', tag: 'SỰ KIỆN', title: 'Ngày hội đọc sách LightBook 2026', desc: 'Khám phá hương thềm trị mở trong ngày đọc sách năm.', img: 'img/news/news_festival_cover.jpg' },
+    { id: 'n2', tag: 'CẢM HỨNG', title: 'Lợi ích của việc đọc sách buổi sáng', desc: 'Vì sao đọc sách buổi sáng giúp bạn cả ngày tỉnh táo và tốt cho não bộ.', img: 'img/news/news_morning_reading.jpg' },
+    { id: 'n3', tag: 'XU HƯỚNG', title: 'Sự trỗi dậy của thiết kế bìa sách tối giản', desc: 'Khám phá xu hướng thềm trị mở trong xuất bản hiện nay.', img: 'img/news/news_minimalist_cover.jpg' },
   ];
 
   ngOnInit(): void {
@@ -86,6 +82,21 @@ export class Homepage implements OnInit, OnDestroy {
       this.remaining = this.remaining > 0 ? this.remaining - 1 : 0;
       this.render();
     }, 1000);
+
+    // Lấy tin tức từ backend API
+    this.bookService.getNews().subscribe({
+      next: (data) => {
+        if (data && data.length > 0) {
+          this.news = data;
+        } else {
+          this.news = this.fallbackNews;
+        }
+      },
+      error: (err) => {
+        console.warn('Không thể lấy tin tức từ backend, dùng dữ liệu dự phòng:', err);
+        this.news = this.fallbackNews;
+      }
+    });
 
     // Lấy dữ liệu sách từ backend API
     this.bookService.getBooks().subscribe({

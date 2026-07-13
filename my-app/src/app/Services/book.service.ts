@@ -74,4 +74,42 @@ export class BookService {
       })
     );
   }
+
+  getFeaturedAuthors(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:3002/api/authors').pipe(
+      catchError(err => {
+        console.error('Lỗi khi tải danh sách tác giả nổi bật từ API:', err);
+        throw err;
+      })
+    );
+  }
+
+  getNews(): Observable<NewsArticle[]> {
+    return this.http.get<NewsArticle[]>('http://localhost:3002/api/news').pipe(
+      catchError(err => {
+        console.error('Lỗi khi tải danh sách tin tức từ API:', err);
+        throw err;
+      })
+    );
+  }
+
+  getNewsById(id: string): Observable<NewsArticle> {
+    return this.http.get<NewsArticle>(`http://localhost:3002/api/news/${id}`).pipe(
+      catchError(err => {
+        console.error(`Lỗi khi tải chi tiết tin tức ${id} từ API:`, err);
+        throw err;
+      })
+    );
+  }
+}
+
+export interface NewsArticle {
+  _id?: string;
+  id?: string;
+  tag: string;
+  title: string;
+  desc: string;
+  img: string;
+  content: string;
+  createdAt?: string;
 }

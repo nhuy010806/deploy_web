@@ -60,7 +60,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="flash-sales">
     <div class="row-head">
       <div class="flash-head">
         <span class="flash-title">⚡ Flash Sale</span>
@@ -198,21 +198,7 @@
     </div>
   </section>
 
-  <!-- ══ AUTHORS ══ -->
-  <section class="authors-section">
-    <h2 class="block-title">Góc tác giả</h2>
-    <div class="grid-2">
-      @for (a of authors; track $index) {
-        <div class="author-card">
-          <img class="author-avatar" [src]="a.img" [alt]="a.name" />
-          <div class="author-info">
-            <div class="author-name">{{ a.name }}</div>
-            <p class="author-desc">{{ a.desc }}</p>
-          </div>
-        </div>
-      }
-    </div>
-  </section>
+
 
   <!-- ══ SUGGESTIONS ══ -->
   <section class="section">
@@ -259,7 +245,7 @@
     <h2 class="block-title center-text">LIGHTBOOK NEWS</h2>
     <div class="grid-3">
       @for (n of news; track $index) {
-        <article class="news-card">
+        <article class="news-card" [routerLink]="['/news']" [queryParams]="{ id: n.id || n._id }" style="cursor: pointer;">
           <div class="news-thumb">
             <span class="news-tag">{{ n.tag }}</span>
             <img [src]="n.img" [alt]="n.title" />
@@ -267,7 +253,7 @@
           <div class="news-body">
             <h3 class="news-title">{{ n.title }}</h3>
             <p class="news-desc">{{ n.desc }}</p>
-            <a class="news-more" routerLink="/dashboard">READ MORE →</a>
+            <a class="news-more" [routerLink]="['/news']" [queryParams]="{ id: n.id || n._id }">READ MORE →</a>
           </div>
         </article>
       }

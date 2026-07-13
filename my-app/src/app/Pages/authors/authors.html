@@ -1,0 +1,219 @@
+<div class="authors-container">
+  <!-- CỘT TRÁI: SIDEBAR LỌC TÁC GIẢ -->
+  <aside class="authors-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-header-icon">✍️</div>
+      <div>
+        <h2 class="sidebar-title">Góc Tác Giả</h2>
+        <p class="sidebar-subtitle">Khám phá vũ trụ văn học của riêng bạn</p>
+      </div>
+    </div>
+
+    <!-- Thanh tìm kiếm tác giả -->
+    <div class="search-wrapper">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery" 
+        (input)="filterAuthors()" 
+        placeholder="Tìm tên tác giả..." 
+        class="search-input"
+      />
+      <button *ngIf="searchQuery" (click)="resetFilters()" class="clear-btn" title="Đặt lại">&times;</button>
+    </div>
+
+    <!-- Bộ lọc nhanh chữ cái A-Z -->
+    <div class="alphabet-scroll">
+      <button 
+        *ngFor="let letter of alphabet" 
+        [class.active]="selectedLetter === letter" 
+        (click)="selectLetter(letter)"
+        class="letter-btn"
+      >
+        {{ letter }}
+      </button>
+    </div>
+
+    <!-- Danh sách tác giả -->
+    <div class="authors-list-wrapper">
+      <div *ngIf="isLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Đang tải tác giả...</p>
+      </div>
+
+      <div *ngIf="!isLoading && filteredAuthors.length === 0" class="empty-state-text">
+        <p>Không tìm thấy tác giả nào khớp với tìm kiếm.</p>
+        <button (click)="resetFilters()" class="btn-reset">Hiển thị tất cả</button>
+      </div>
+
+      <ul *ngIf="!isLoading && filteredAuthors.length > 0" class="authors-list">
+        <li 
+          *ngFor="let author of filteredAuthors" 
+          [class.active]="selectedAuthor === author.name" 
+          (click)="selectAuthor(author.name)"
+          class="author-item"
+        >
+          <div class="author-item-left">
+            <span class="author-avatar-badge">{{ author.initials }}</span>
+            <span class="author-name">{{ author.name }}</span>
+          </div>
+          <span class="book-count-badge">{{ author.bookCount }} sách</span>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- CỘT PHẢI: CHI TIẾT TÁC PHẨM & DASHBOARD CHÀO MỪNG -->
+  <main class="authors-main-content">
+    <div *ngIf="isLoading" class="main-loading">
+      <div class="spinner-large"></div>
+      <p>Đang liên kết dữ liệu từ MongoDB...</p>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+      <!-- TRẠNG THÁI CHƯA CHỌN TÁC GIẢ: BẢNG SỐ LIỆU TỔNG QUAN -->
+      <div *ngIf="!selectedAuthor" class="dashboard-welcome">
+        
+        <!-- Welcome Banner Header -->
+        <div class="welcome-banner">
+          <div class="banner-content">
+            <span class="banner-tag">THƯ VIỆN ĐIỆN TỬ</span>
+            <h1 class="welcome-title">Góc Tác Giả</h1>
+            <p class="welcome-desc">
+              Khám phá chân dung nghệ thuật và những tác phẩm văn học xuất sắc từ các nhà văn, dịch giả hàng đầu tại Lightbooks. Chọn một tác giả ở danh mục bên trái để bắt đầu.
+            </p>
+          </div>
+          <div class="banner-illustration">
+            <div class="circle-graphic font-graphic">A</div>
+            <div class="circle-graphic pen-graphic">🖋️</div>
+          </div>
+        </div>
+
+        <!-- Thống kê nhanh (Stats Grid) -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-container">
+              <img src="assets/icon/ic_vechungtoi_congdong.png" alt="Tác giả đại diện" class="stat-icon-img" />
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ authors.length }}</span>
+              <span class="stat-label">Tác giả đại diện</span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon-container">
+              <img src="assets/icon/ic_vechungtoi_camnang.png" alt="Sách mới phát hành" class="stat-icon-img" />
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalNewBooks }}</span>
+              <span class="stat-label">Sách mới phát hành</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-container">
+              <img src="assets/icon/icon_cscn_banhang.png" alt="Sách cũ/Thanh lý" class="stat-icon-img" />
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalOldBooks }}</span>
+              <span class="stat-label">Sách cũ/Thanh lý</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tác giả tiêu biểu (Featured Showcase) -->
+        <div class="featured-showcase" *ngIf="authors.length > 0">
+          <h3 class="showcase-title">Tác giả nổi bật tuần này</h3>
+          <div class="showcase-cards">
+            
+            <div 
+              *ngFor="let feat of authors.slice(0, 2)" 
+              class="showcase-item" 
+              (click)="selectAuthor(feat.name)"
+            >
+              <div class="showcase-avatar">{{ feat.initials }}</div>
+              <div class="showcase-body">
+                <h4 class="showcase-name">{{ feat.name }}</h4>
+                <p class="showcase-quote">Hiện tại có {{ feat.bookCount }} tác phẩm của tác giả này đang có mặt tại thư viện sách Lightbooks.</p>
+                <span class="showcase-link">Xem tác phẩm &rarr;</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TRẠNG THÁI ĐÃ CHỌN TÁC GIẢ: HIỂN THỊ TÁC PHẨM -->
+      <div *ngIf="selectedAuthor" class="author-details-view">
+        
+        <!-- Header Profile tác giả -->
+        <div class="profile-header-card">
+          <div class="profile-avatar-gradient">
+            {{ selectedAuthor.charAt(0) }}
+          </div>
+          <div class="profile-meta">
+            <div class="profile-back-link" (click)="selectedAuthor = ''">
+              &larr; Quay lại bảng tổng quan
+            </div>
+            <h1 class="profile-name">{{ selectedAuthor }}</h1>
+            
+            <!-- Huy hiệu thống kê sách của tác giả -->
+            <div class="profile-badges">
+              <span class="badge-item total-badge">
+                Tổng cộng: {{ booksByAuthor.length }} cuốn
+              </span>
+              <span *ngIf="selectedAuthorNewCount > 0" class="badge-item new-badge">
+                {{ selectedAuthorNewCount }} Sách mới
+              </span>
+              <span *ngIf="selectedAuthorOldCount > 0" class="badge-item old-badge">
+                {{ selectedAuthorOldCount }} Sách cũ
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tiêu đề lưới -->
+        <div class="grid-section-title">
+          Danh mục tác phẩm trưng bày
+        </div>
+
+        <!-- Lưới tác phẩm -->
+        <div class="books-grid">
+          <a 
+            *ngFor="let book of booksByAuthor" 
+            [routerLink]="['/book-detail', book._id]" 
+            class="book-card-anchor"
+          >
+            <div class="book-premium-card">
+              <div class="book-thumbnail-container">
+                <!-- Huy hiệu giảm giá -->
+                <span *ngIf="book.discount" class="book-discount">{{ book.discount }}</span>
+                <!-- Nhãn sách cũ/mới -->
+                <span class="book-type-tag" [class.is-old]="book.isOld">
+                  {{ book.isOld ? 'Sách Cũ' : 'Sách Mới' }}
+                </span>
+                <img [src]="book.img" [alt]="book.title" class="book-image-content" />
+                <div class="book-overlay-hover">
+                  <span class="overlay-text">Xem chi tiết</span>
+                </div>
+              </div>
+              
+              <div class="book-metadata">
+                <h3 class="book-title-text" [title]="book.title">{{ book.title }}</h3>
+                <p class="book-author-text">Tác giả: {{ book.author }}</p>
+                <div class="book-pricing-row">
+                  <span class="price-now-text">{{ book.priceStr }}</span>
+                  <span *ngIf="book.oldPrice" class="price-old-text">{{ book.oldPrice }}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </main>
+</div>

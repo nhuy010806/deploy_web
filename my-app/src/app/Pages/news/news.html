@@ -1,0 +1,58 @@
+<div class="news-container">
+  <!-- TIÊU ĐỀ TRANG -->
+  <div class="news-header">
+    <h1 class="news-page-title">LIGHTBOOK NEWS</h1>
+  </div>
+
+  <!-- HIỆU ỨNG LOADING -->
+  <div *ngIf="isLoading" class="news-loading">
+    <div class="spinner"></div>
+    <p>Đang tải bản tin Lightbooks...</p>
+  </div>
+
+  <!-- LƯỚI TIN TỨC CHÍNH -->
+  <div *ngIf="!isLoading && newsList.length > 0" class="news-grid">
+    <article *ngFor="let news of newsList" class="news-card" (click)="openArticleModal(news)">
+      <div class="news-card-image-wrapper">
+        <span class="news-card-tag">{{ news.tag }}</span>
+        <img [src]="news.img" [alt]="news.title" class="news-card-image" />
+      </div>
+      <div class="news-card-body">
+        <h2 class="news-card-title">{{ news.title }}</h2>
+        <p class="news-card-desc">{{ news.desc }}</p>
+        <span class="news-readmore-btn">
+          READ MORE <span class="arrow">&rarr;</span>
+        </span>
+      </div>
+    </article>
+  </div>
+
+  <div *ngIf="!isLoading && newsList.length === 0" class="news-empty">
+    <p>Hiện chưa có bản tin mới nào được đăng tải.</p>
+  </div>
+
+  <!-- POPUP MODAL ĐỌC CHI TIẾT BÀI VIẾT -->
+  <div 
+    *ngIf="selectedArticle" 
+    class="news-modal-overlay" 
+    (click)="closeArticleModal()"
+  >
+    <div 
+      class="news-modal-card" 
+      (click)="$event.stopPropagation()"
+    >
+      <button class="news-modal-close" (click)="closeArticleModal()" title="Đóng">&times;</button>
+      
+      <div class="news-modal-scroll-area">
+        <div class="news-modal-header">
+          <span class="news-modal-tag">{{ selectedArticle.tag }}</span>
+          <h1 class="news-modal-title">{{ selectedArticle.title }}</h1>
+        </div>
+        
+        <img [src]="selectedArticle.img" [alt]="selectedArticle.title" class="news-modal-cover" />
+        
+        <div class="news-modal-content" [innerHTML]="selectedArticle.content"></div>
+      </div>
+    </div>
+  </div>
+</div>

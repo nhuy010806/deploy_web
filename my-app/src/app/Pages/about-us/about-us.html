@@ -7,15 +7,15 @@
       Lightbooks không chỉ là một hiệu sách. Chúng tôi là cầu nối giữa tri thức nhân loại và lối sống bền vững để mang đến những cuốn sách ý nghĩa nhất cho hành trình phát triển của bạn.
     </p>
     <div class="hero-btns">
-      <button class="btn-primary">Khám phá kho sách</button>
-      <button class="btn-secondary">Sứ mệnh và tầm nhìn</button>
+      <button class="btn-primary" routerLink="/homepage">Khám phá kho sách</button>
+      <button class="btn-secondary" (click)="scrollToSection('mission-vision')">Sứ mệnh và tầm nhìn</button>
     </div>
   </div>
   <img class="hero-img" src="img/books/shelf_banner.jpg" alt="Thư viện sách và mầm xanh" />
 </section>
 
 <!-- ── MISSION / VISION ── -->
-<section class="section">
+<section class="section" id="mission-vision">
   <div class="mv-grid">
     <!-- Sứ mệnh -->
     <div class="mv-card dark">

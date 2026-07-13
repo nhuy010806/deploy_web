@@ -21,6 +21,8 @@ import { Homepage } from './Pages/homepage/homepage';
 import { SachDienTu } from './Pages/sach-dien-tu/sach-dien-tu';
 import { SachCu } from './Pages/sach-cu/sach-cu';
 import { BooksDetailComponent } from './Pages/books-detail/books-detail';
+import { AuthorsComponent } from './Pages/authors/authors';
+import { NewsComponent } from './Pages/news/news';
 
 // --- ADMIN IMPORTS ---
 import { AdminLayoutComponent } from './Pages/admin/admin-layout/admin-layout';
@@ -54,9 +56,11 @@ export const routes: Routes = [
   { path: 'book-detail/:id', component: BooksDetailComponent },
   { path: 'book-detail', component: BooksDetailComponent },
   { path: 'homepage', component: Homepage },
+  { path: 'authors', component: AuthorsComponent },
   { path: 'sach-dien-tu', component: SachDienTu },
   { path: 'sach-cu', component: SachCu },
   { path: 'about-us', component: AboutUs },
+  { path: 'news', component: NewsComponent },
   { path: 'policy', component: Policy },
   { path: 'login', component: LoginPage },
   { path: 'dashboard', component: DashboardPage },

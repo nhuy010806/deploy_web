@@ -87,6 +87,38 @@ const Liquidation = require('./models/Liquidation');
         // Expose db to all routes via app.locals
         app.locals.db = db;
 
+        // Seed authors collection if empty
+        try {
+            const authorCount = await db.collection('authors').countDocuments();
+            if (authorCount === 0) {
+                await db.collection('authors').insertMany([
+                    { name: 'Nguyễn Nhật Ánh', desc: 'Vừa ra mắt ấn bản mới – Nặng nào có một chương hồn bồn lặng lười', img: 'img/books/office_preview.jpg' },
+                    { name: 'Phan Ý Yên', desc: 'Buổi ký tặng sách sắp về tại Phố Sách Hà Nội vào chủ nhật này', img: 'img/books/office_preview.jpg' },
+                    { name: 'Rosie Nguyễn', desc: 'Tặng bạn gói sự thật và cuộc đời không bạn gói ngừng dạy bàn chung tự', img: 'img/books/office_preview.jpg' },
+                    { name: 'Hamlet Trương', desc: 'Chuẩn bị cho dự án sách mới kết hợp cùng nhau phim nấp cộng sẽ', img: 'img/books/office_preview.jpg' }
+                ]);
+                console.log('[DB] Đã gieo dữ liệu tác giả mẫu thành công vào collection authors.');
+            }
+        } catch (err) {
+            console.error('Lỗi khi gieo dữ liệu tác giả:', err);
+        }
+
+        // Seed news collection if empty
+        try {
+            const newsCount = await db.collection('news').countDocuments();
+            if (newsCount === 0) {
+                const newsJsonPath = path.join(__dirname, 'news.json');
+                if (fs.existsSync(newsJsonPath)) {
+                    const rawData = fs.readFileSync(newsJsonPath, 'utf8');
+                    const newsData = JSON.parse(rawData);
+                    await db.collection('news').insertMany(newsData);
+                    console.log('[DB] Đã gieo dữ liệu tin tức mẫu thành công vào collection news.');
+                }
+            }
+        } catch (err) {
+            console.error('Lỗi khi gieo dữ liệu tin tức:', err);
+        }
+
         // Load Routes
         const authRoutes = require('./routes/authRoutes');
         const forgotPasswordRoutes = require('./routes/forgotPasswordRoutes');
@@ -209,6 +241,47 @@ const Liquidation = require('./models/Liquidation');
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
             res.json({ success: true, message: 'Đăng xuất thành công.' });
+        });
+
+        // API lấy danh sách tác giả nổi bật từ collection 'authors'
+        app.get('/api/authors', async (req, res) => {
+            try {
+                const authorsList = await db.collection('authors').find({}).toArray();
+                res.json(authorsList);
+            } catch (err) {
+                console.error('Lỗi khi lấy danh sách tác giả:', err);
+                res.status(500).json({ error: 'Lỗi server' });
+            }
+        });
+
+        // API lấy danh sách tin tức từ collection 'news'
+        app.get('/api/news', async (req, res) => {
+            try {
+                const newsList = await db.collection('news').find({}).toArray();
+                res.json(newsList);
+            } catch (err) {
+                console.error('Lỗi khi lấy danh sách tin tức:', err);
+                res.status(500).json({ error: 'Lỗi server' });
+            }
+        });
+
+        // API lấy chi tiết 1 tin tức theo ID hoặc custom ID
+        app.get('/api/news/:id', async (req, res) => {
+            try {
+                const newsId = req.params.id;
+                let query = { id: newsId };
+                if (ObjectId.isValid(newsId)) {
+                    query = { $or: [{ _id: new ObjectId(newsId) }, { id: newsId }] };
+                }
+                const article = await db.collection('news').findOne(query);
+                if (!article) {
+                    return res.status(404).json({ error: 'Không tìm thấy tin tức' });
+                }
+                res.json(article);
+            } catch (err) {
+                console.error('Lỗi khi lấy chi tiết tin tức:', err);
+                res.status(500).json({ error: 'Lỗi server' });
+            }
         });
 
         // API lấy danh sách sách từ collection 'books'
