@@ -1,0 +1,134 @@
+<div class="marketing-wrapper">
+  <div class="flex-header">
+    <div>
+      <h1 class="page-title">Marketing &amp; Content</h1>
+      <p class="page-subtitle">Quản lý và xuất bản các bài viết tin tức trên LightBook News</p>
+    </div>
+    <button class="btn-primary" (click)="openAddModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      Thêm bài viết
+    </button>
+  </div>
+
+  <!-- News List Table Card -->
+  <div class="content-card">
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="spinner"></div>
+    </div>
+
+    <table class="admin-table" *ngIf="!isLoading">
+      <thead>
+        <tr>
+          <th>Ảnh bìa</th>
+          <th>Chủ đề (Tag)</th>
+          <th>Tiêu đề</th>
+          <th>Tóm tắt ngắn</th>
+          <th style="text-align: right;">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let article of newsList">
+          <td>
+            <img [src]="article.img || 'img/books/shelf_banner.jpg'" [alt]="article.title" class="news-thumb">
+          </td>
+          <td>
+            <span class="tag-badge" [ngClass]="{
+              'tag-su-kien': article.tag === 'SỰ KIỆN',
+              'tag-cam-hung': article.tag === 'CẢM HỨNG',
+              'tag-xu-huong': article.tag === 'XU HƯỚNG',
+              'tag-khac': article.tag !== 'SỰ KIỆN' && article.tag !== 'CẢM HỨNG' && article.tag !== 'XU HƯỚNG'
+            }">
+              {{ article.tag }}
+            </span>
+          </td>
+          <td class="font-bold text-dark font-14">{{ article.title }}</td>
+          <td class="text-gray text-truncate">{{ article.desc }}</td>
+          <td style="text-align: right;">
+            <div class="action-buttons">
+              <button class="btn-edit" (click)="openEditModal(article)" title="Sửa">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+              </button>
+              <button class="btn-delete" (click)="onDelete(article)" title="Xóa">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="newsList.length === 0">
+          <td colspan="5" class="empty-state">
+            Không tìm thấy bài viết nào. Hãy bấm "+ Thêm bài viết" để tạo tin tức đầu tiên!
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- POPUP MODAL: THÊM / SỬA BÀI VIẾT -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ isEditMode ? 'Chỉnh sửa bài viết' : 'Thêm bài viết tin tức mới' }}</h2>
+      <button class="btn-close" (click)="closeModal()">×</button>
+    </div>
+    
+    <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <!-- Tiêu đề -->
+        <div class="form-group">
+          <label for="title">Tiêu đề bài viết</label>
+          <input id="title" type="text" formControlName="title" placeholder="Nhập tiêu đề tin tức (từ 5 ký tự)..." class="form-control" />
+        </div>
+
+        <div class="form-row-2">
+          <!-- Chủ đề (Tag) -->
+          <div class="form-group">
+            <label for="tag">Chủ đề (Tag)</label>
+            <select id="tag" formControlName="tag" class="form-control select-input">
+              <option value="SỰ KIỆN">SỰ KIỆN</option>
+              <option value="CẢM HỨNG">CẢM HỨNG</option>
+              <option value="XU HƯỚNG">XU HƯỚNG</option>
+              <option value="TIN TỨC">TIN TỨC</option>
+            </select>
+          </div>
+
+          <!-- Ảnh bìa (Tải lên từ máy) -->
+          <div class="form-group">
+            <label>Ảnh bìa bài viết</label>
+            <div class="image-upload-wrapper">
+              <input type="file" #imageInput (change)="onImageSelected($event)" accept="image/*" style="display: none;" />
+              <div class="image-preview-box" (click)="imageInput.click()" [class.has-image]="articleForm.value.img" style="cursor: pointer;">
+                <img *ngIf="articleForm.value.img" [src]="articleForm.value.img" alt="Ảnh bìa xem trước" class="preview-img" />
+                <div class="upload-placeholder" *ngIf="!articleForm.value.img">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
+                  <span>Tải ảnh lên từ máy</span>
+                </div>
+                <div class="upload-overlay" *ngIf="articleForm.value.img">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="camera-icon"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                  <span>Thay đổi ảnh</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tóm tắt ngắn -->
+        <div class="form-group">
+          <label for="desc">Mô tả tóm tắt ngắn</label>
+          <textarea id="desc" formControlName="desc" rows="2" placeholder="Tóm tắt ngắn gọn hiển thị ở danh sách bài viết..." class="form-control"></textarea>
+        </div>
+
+        <!-- Nội dung đầy đủ -->
+        <div class="form-group">
+          <label for="content">Nội dung chi tiết (Chấp nhận mã HTML)</label>
+          <textarea id="content" formControlName="content" rows="6" placeholder="Nhập nội dung đầy đủ của bài viết..." class="form-control"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" (click)="closeModal()">Hủy bỏ</button>
+        <button type="submit" class="btn-save" [disabled]="articleForm.invalid">Lưu thay đổi</button>
+      </div>
+    </form>
+  </div>
+</div>

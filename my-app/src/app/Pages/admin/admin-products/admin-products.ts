@@ -161,6 +161,22 @@ export class AdminProductsComponent implements OnInit {
     this.showModal = false;
   }
 
+  onImageSelected(event: any): void {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Dung lượng ảnh tối đa là 2MB!');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.modalProduct.image = reader.result as string;
+        this.cdr.detectChanges();
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   saveProduct() {
     if (!this.modalProduct.title || !this.modalProduct.author) {
       alert('Vui lòng nhập đầy đủ Tên sách và Tác giả');

@@ -191,9 +191,23 @@
             <input type="number" [(ngModel)]="modalProduct.stock" placeholder="Số lượng tồn kho...">
           </div>
 
+          <!-- Ảnh bìa (Tải lên từ máy) -->
           <div class="form-group">
-            <label>Đường dẫn ảnh bìa (Image URL)</label>
-            <input type="text" [(ngModel)]="modalProduct.image" placeholder="URL ảnh bìa...">
+            <label>Ảnh bìa sách</label>
+            <div class="image-upload-wrapper">
+              <input type="file" #imageInput (change)="onImageSelected($event)" accept="image/*" style="display: none;" />
+              <div class="image-preview-box" (click)="imageInput.click()" [class.has-image]="modalProduct.image" style="cursor: pointer;">
+                <img *ngIf="modalProduct.image" [src]="modalProduct.image" alt="Ảnh bìa xem trước" class="preview-img" />
+                <div class="upload-placeholder" *ngIf="!modalProduct.image">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
+                  <span>Tải ảnh lên từ máy</span>
+                </div>
+                <div class="upload-overlay" *ngIf="modalProduct.image">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="camera-icon"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                  <span>Thay đổi ảnh</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

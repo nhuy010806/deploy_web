@@ -284,6 +284,75 @@ const Liquidation = require('./models/Liquidation');
             }
         });
 
+        // API thêm tin tức mới
+        app.post('/api/news', async (req, res) => {
+            try {
+                const { tag, title, desc, img, content } = req.body;
+                const newArticle = {
+                    tag: tag || 'TIN TỨC',
+                    title: title || '',
+                    desc: desc || '',
+                    img: img || '',
+                    content: content || '',
+                    createdAt: new Date()
+                };
+                const result = await db.collection('news').insertOne(newArticle);
+                res.status(201).json({ message: 'Thêm tin tức thành công', _id: result.insertedId });
+            } catch (err) {
+                console.error('Lỗi khi thêm tin tức:', err);
+                res.status(500).json({ error: 'Lỗi server' });
+            }
+        });
+
+        // API sửa tin tức
+        app.put('/api/news/:id', async (req, res) => {
+            try {
+                const newsId = req.params.id;
+                const { tag, title, desc, img, content } = req.body;
+                let query = { id: newsId };
+                if (ObjectId.isValid(newsId)) {
+                    query = { $or: [{ _id: new ObjectId(newsId) }, { id: newsId }] };
+                }
+                const updateDoc = {
+                    $set: {
+                        tag,
+                        title,
+                        desc,
+                        img,
+                        content,
+                        updatedAt: new Date()
+                    }
+                };
+                const result = await db.collection('news').updateOne(query, updateDoc);
+                if (result.matchedCount === 0) {
+                    return res.status(404).json({ error: 'Không tìm thấy tin tức để cập nhật' });
+                }
+                res.json({ message: 'Cập nhật tin tức thành công' });
+            } catch (err) {
+                console.error('Lỗi khi sửa tin tức:', err);
+                res.status(500).json({ error: 'Lỗi server' });
+            }
+        });
+
+        // API xóa tin tức
+        app.delete('/api/news/:id', async (req, res) => {
+            try {
+                const newsId = req.params.id;
+                let query = { id: newsId };
+                if (ObjectId.isValid(newsId)) {
+                    query = { $or: [{ _id: new ObjectId(newsId) }, { id: newsId }] };
+                }
+                const result = await db.collection('news').deleteOne(query);
+                if (result.deletedCount === 0) {
+                    return res.status(404).json({ error: 'Không tìm thấy tin tức để xóa' });
+                }
+                res.json({ message: 'Xóa tin tức thành công' });
+            } catch (err) {
+                console.error('Lỗi khi xóa tin tức:', err);
+                res.status(500).json({ error: 'Lỗi server' });
+            }
+        });
+
         // API lấy danh sách sách từ collection 'books'
         app.get('/api/books', async (req, res) => {
             try {

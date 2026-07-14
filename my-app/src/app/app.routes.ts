@@ -34,6 +34,7 @@ import { AdminCustomersComponent } from './Pages/admin/admin-customers/admin-cus
 import { AdminCustomerDetailsComponent } from './Pages/admin/admin-customer-details/admin-customer-details';
 import { AdminProductsComponent } from './Pages/admin/admin-products/admin-products';
 import { AdminSettingsComponent } from './Pages/admin/admin-settings/admin-settings';
+import { AdminMarketingComponent } from './Pages/admin/admin-marketing/admin-marketing';
 
 export const routes: Routes = [
   // ... Admin Routes
@@ -49,6 +50,7 @@ export const routes: Routes = [
       { path: 'customers', component: AdminCustomersComponent },
       { path: 'customers/:id', component: AdminCustomerDetailsComponent },
       { path: 'products', component: AdminProductsComponent },
+      { path: 'marketing', component: AdminMarketingComponent },
       { path: 'settings', component: AdminSettingsComponent }
     ]
   },
