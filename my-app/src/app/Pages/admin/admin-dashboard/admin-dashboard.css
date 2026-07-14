@@ -29,10 +29,16 @@
   margin-bottom: 16px;
 }
 
-.bg-green-light { background-color: #e6f0ed; }
-.bg-red-light { background-color: #fed7d7; }
-.text-green { color: #0b422e; }
-.text-red { color: #e53e3e; }
+.bg-emerald-light { background-color: #d1fae5; }
+.bg-indigo-light { background-color: #e0e7ff; }
+.bg-purple-light { background-color: #f3e8ff; }
+.bg-rose-light { background-color: #ffe4e6; }
+.text-rose { color: #be123c; }
+
+.trend-emerald { background-color: #d1fae5; color: #047857; }
+.trend-indigo { background-color: #e0e7ff; color: #4338ca; }
+.trend-purple { background-color: #f3e8ff; color: #6b21a8; }
+.trend-rose { background-color: #ffe4e6; color: #be123c; }
 
 .metric-trend {
   position: absolute;
@@ -157,6 +163,14 @@
   position: relative;
 }
 
+.bars-wrapper .bar-item:nth-child(1) .bar-fill { background: linear-gradient(180deg, #3b82f6, #60a5fa); } /* Thứ 2: Blue */
+.bars-wrapper .bar-item:nth-child(2) .bar-fill { background: linear-gradient(180deg, #10b981, #34d399); } /* Thứ 3: Green */
+.bars-wrapper .bar-item:nth-child(3) .bar-fill { background: linear-gradient(180deg, #f59e0b, #fbbf24); } /* Thứ 4: Amber */
+.bars-wrapper .bar-item:nth-child(4) .bar-fill { background: linear-gradient(180deg, #8b5cf6, #a78bfa); } /* Thứ 5: Purple */
+.bars-wrapper .bar-item:nth-child(5) .bar-fill { background: linear-gradient(180deg, #ec4899, #f472b6); } /* Thứ 6: Pink */
+.bars-wrapper .bar-item:nth-child(6) .bar-fill { background: linear-gradient(180deg, #06b6d4, #22d3ee); } /* Thứ 7: Cyan */
+.bars-wrapper .bar-item:nth-child(7) .bar-fill { background: linear-gradient(180deg, #ef4444, #f87171); } /* Chủ nhật: Red */
+
 .bar-value-tooltip {
   position: absolute;
   top: -24px;
@@ -164,9 +178,16 @@
   transform: translateX(-50%);
   font-size: 10px;
   font-weight: 700;
-  color: #0b422e;
   white-space: nowrap;
 }
+
+.bars-wrapper .bar-item:nth-child(1) .bar-value-tooltip { color: #2563eb; }
+.bars-wrapper .bar-item:nth-child(2) .bar-value-tooltip { color: #059669; }
+.bars-wrapper .bar-item:nth-child(3) .bar-value-tooltip { color: #d97706; }
+.bars-wrapper .bar-item:nth-child(4) .bar-value-tooltip { color: #7c3aed; }
+.bars-wrapper .bar-item:nth-child(5) .bar-value-tooltip { color: #db2777; }
+.bars-wrapper .bar-item:nth-child(6) .bar-value-tooltip { color: #0891b2; }
+.bars-wrapper .bar-item:nth-child(7) .bar-value-tooltip { color: #dc2626; }
 
 .bar-label {
   margin-top: 8px;
@@ -212,9 +233,17 @@
   transition: width 1s ease-out;
 }
 
-.category-item:nth-child(2) .progress-fill { background-color: #38a169; }
-.category-item:nth-child(3) .progress-fill { background-color: #718096; }
-.category-item:nth-child(4) .progress-fill { background-color: #e2e8f0; }
+.categories-list .category-item:nth-child(1) .progress-fill { background: linear-gradient(90deg, #f43f5e, #fda4af); } /* Rose */
+.categories-list .category-item:nth-child(2) .progress-fill { background: linear-gradient(90deg, #3b82f6, #93c5fd); } /* Blue */
+.categories-list .category-item:nth-child(3) .progress-fill { background: linear-gradient(90deg, #10b981, #6ee7b7); } /* Green */
+.categories-list .category-item:nth-child(4) .progress-fill { background: linear-gradient(90deg, #eab308, #fde047); } /* Yellow */
+.categories-list .category-item:nth-child(5) .progress-fill { background: linear-gradient(90deg, #a855f7, #d8b4fe); } /* Purple */
+
+.categories-list .category-item:nth-child(1) .cat-pct { color: #e11d48; }
+.categories-list .category-item:nth-child(2) .cat-pct { color: #2563eb; }
+.categories-list .category-item:nth-child(3) .cat-pct { color: #059669; }
+.categories-list .category-item:nth-child(4) .cat-pct { color: #ca8a04; }
+.categories-list .category-item:nth-child(5) .cat-pct { color: #9333ea; }
 
 /* Table */
 .admin-table {
@@ -261,25 +290,47 @@
 .text-gray { color: #718096; }
 
 .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
 }
 
 .status-processing {
-  background-color: #e6fffa;
-  color: #0b422e;
+  background-color: #fffaf0;
+  color: #dd6b20;
+  border-color: #fbd38d;
+}
+.status-processing .status-dot {
+  background-color: #dd6b20;
 }
 
 .status-delivered {
-  background-color: #0b422e;
-  color: white;
+  background-color: #f0fff4;
+  color: #38a169;
+  border-color: #98dbb5;
+}
+.status-delivered .status-dot {
+  background-color: #38a169;
 }
 
 .status-shipping {
-  background-color: #ebf8ff;
-  color: #2b6cb0;
+  background-color: #e6fffa;
+  color: #319795;
+  border-color: #81e6d9;
+}
+.status-shipping .status-dot {
+  background-color: #319795;
 }
 
 .btn-secondary {
